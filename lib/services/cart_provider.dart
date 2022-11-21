@@ -62,10 +62,10 @@ class CartProvider with ChangeNotifier {
   }
 
   void removeTotalPrice(double price) async {
-    if (_totalPrice < 0) {
-      _totalPrice = 0;
-    } else {
+    if (_totalPrice > 0) {
       _totalPrice -= price;
+    } else {
+      _totalPrice = 0;
     }
     setPrefs();
     notifyListeners();

@@ -57,7 +57,7 @@ class _MainProductState extends State<MainProduct> {
                       Consumer<CartProvider>(builder: ((context, value, child) {
                     return Text(
                       value.counter.toString(),
-                      style:const TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                       ),
                     );
@@ -112,6 +112,10 @@ class _MainProductState extends State<MainProduct> {
                           .then((value) {
                         cart.addTotalPrice(widget.price);
                         cart.addItem();
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context) {
+                          return const CartScreen();
+                        }));
                       }).onError((error, stackTrace) {
                         print(error);
                       });

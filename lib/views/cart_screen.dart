@@ -24,10 +24,10 @@ class _CartScreenState extends State<CartScreen> {
           Center(
             child: InkWell(
               onTap: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) {
-                  return const CartScreen();
-                }));
+                // Navigator.of(context)
+                //     .push(MaterialPageRoute(builder: (context) {
+                //   return const CartScreen();
+                // }));
               },
               child: Padding(
                 padding: const EdgeInsets.only(right: 12.0),
@@ -152,7 +152,10 @@ class _CartScreenState extends State<CartScreen> {
                                                         children: [
                                                           InkWell(
                                                               onTap: () {
-                                                                decrementQuantity(snapshot, index, cart);
+                                                                decrementQuantity(
+                                                                    snapshot,
+                                                                    index,
+                                                                    cart);
                                                               },
                                                               child: Icon(Icons
                                                                   .remove)),
@@ -164,7 +167,10 @@ class _CartScreenState extends State<CartScreen> {
                                                           ),
                                                           InkWell(
                                                               onTap: () {
-                                                                incrementQuantity(snapshot, index, cart);
+                                                                incrementQuantity(
+                                                                    snapshot,
+                                                                    index,
+                                                                    cart);
                                                               },
                                                               child: Icon(
                                                                   Icons.add)),
@@ -207,129 +213,63 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
-  void incrementQuantity(AsyncSnapshot<List<Cart>> snapshot, int index, CartProvider cart) {
-    int quantity =
-        snapshot
-            .data![
-                index]
-            .quantity!;
-    
-    dynamic price =
-        snapshot
-            .data![
-                index]
-            .initialPrice;
-    
+  void incrementQuantity(
+      AsyncSnapshot<List<Cart>> snapshot, int index, CartProvider cart) {
+    int quantity = snapshot.data![index].quantity!;
+
+    dynamic price = snapshot.data![index].initialPrice;
+
     quantity++;
-    dynamic
-        newprice =
-        quantity *
-            price;
-    
+    dynamic newprice = quantity * price;
+
     DBhelper()
         .update(Cart(
-            productId: snapshot
-                .data![
-                    index]
-                .productId,
-            id: snapshot
-                .data![
-                    index]
-                .id,
-            productName: snapshot
-                .data![
-                    index]
-                .productName,
-            image: snapshot
-                .data![
-                    index]
-                .image,
-            initialPrice: snapshot
-                .data![
-                    index]
-                .initialPrice,
-            productPrice:
-                newprice,
-            quantity:
-                quantity))
-        .then(
-            (value) {
+            productId: snapshot.data![index].productId,
+            id: snapshot.data![index].id,
+            productName: snapshot.data![index].productName,
+            image: snapshot.data![index].image,
+            initialPrice: snapshot.data![index].initialPrice,
+            productPrice: newprice,
+            quantity: quantity))
+        .then((value) {
       newprice = 0;
       quantity = 0;
-      cart.addTotalPrice(snapshot
-          .data![
-              index]
-          .initialPrice);
-    }).onError((error,
-            stackTrace) {
+      cart.addTotalPrice(snapshot.data![index].initialPrice);
+    }).onError((error, stackTrace) {
       print(error);
     });
   }
 
-  void decrementQuantity(AsyncSnapshot<List<Cart>> snapshot, int index, CartProvider cart) {
-    int quantity =
-        snapshot
-            .data![
-                index]
-            .quantity!;
-    
-    dynamic price =
-        snapshot
-            .data![
-                index]
-            .initialPrice;
-    
-    if (quantity <
-        0) {
-      quantity = 0;
-    } else {
+  void decrementQuantity(
+      AsyncSnapshot<List<Cart>> snapshot, int index, CartProvider cart) {
+    int quantity = snapshot.data![index].quantity!;
+
+    dynamic price = snapshot.data![index].initialPrice;
+
+    if (quantity > 0) {
       quantity--;
+    } else {
+      quantity = 0;
     }
-    dynamic
-        newprice =
-        quantity *
-            price;
-    
+    dynamic newprice = quantity * price;
+
     DBhelper()
         .update(Cart(
-            productId: snapshot
-                .data![
-                    index]
-                .productId,
-            id: snapshot
-                .data![
-                    index]
-                .id,
-            productName: snapshot
-                .data![
-                    index]
-                .productName,
-            image: snapshot
-                .data![
-                    index]
-                .image,
-            initialPrice: snapshot
-                .data![
-                    index]
-                .initialPrice,
-            productPrice:
-                newprice,
-            quantity:
-                quantity))
-        .then(
-            (value) {
+            productId: snapshot.data![index].productId,
+            id: snapshot.data![index].id,
+            productName: snapshot.data![index].productName,
+            image: snapshot.data![index].image,
+            initialPrice: snapshot.data![index].initialPrice,
+            productPrice: newprice,
+            quantity: quantity))
+        .then((value) {
       newprice = 0;
       quantity = 0;
-      cart.removeTotalPrice(snapshot
-          .data![
-              index]
-          .initialPrice);
-    }).onError((error,
-            stackTrace) {
+      cart.removeTotalPrice(snapshot.data![index].initialPrice);
+    }).onError((error, stackTrace) {
       print(error);
     });
   }
-
 }
 
 class PriceRow extends StatelessWidget {
